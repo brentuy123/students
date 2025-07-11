@@ -1,0 +1,63 @@
+@extends('layouts.app')
+@section('content')
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    <h1 class="mb-4">Edit User</h1>
+
+    <form action="{{ route('users.edit', $user->id) }}" method="POST" enctype="multipart/form-data" class="card p-4">
+        @csrf
+        @method('PUT')
+
+        <div class="mb-3">
+            <label>Name</label>
+            <input type="text" name="name" class="form-control" value="{{ $user->name }}" required>
+        </div>
+
+        {{-- <div class="mb-3">
+            <label>Role</label>
+            <input type="text" name="role" class="form-control" value="{{ $user->role }}" required>
+        </div> --}}
+
+        <div class="mb-3">
+            <label>Role</label>
+            <select name="role" class="form-control" required>
+                <option value="">- Select Role -</option>
+                <option value="Admin" {{ old('role', $user->role) == 'Admin' ? 'selected' : '' }}>Admin</option>
+                <option value="Customer" {{ old('role', $user->role) == 'Customer' ? 'selected' : '' }}>Customer
+                </option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label>Email</label>
+            <input type="email" name="email" class="form-control" value="{{ $user->email }}" required>
+        </div>
+
+        @if ($user->photo)
+            <div class="mb-3">
+                <label>Current Photo:</label><br>
+                <img src="{{ asset($user->photo) }}" width="100" class="img-thumbnail mb-2">
+            </div>
+        @endif
+
+        <div class="mb-3">
+            <label>Change Photo</label>
+            <input type="file" name="photo" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label>Password</label>
+            <input type="password" name="password" class="form-control" value="{{ $user->password }}" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a href="{{ route('users.index') }}" class="btn btn-secondary">Back</a>
+    </form>
+@endsection
